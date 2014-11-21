@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <div class="aside" tabindex="-1" role="dialog">
+        <div class="aside-dialog">
+            <div class="aside-header" ng-show="title">
+                <h4 class="aside-title" ng-bind="title"></h4>
+            </div>
+            <div class="aside-body">
+                <ul>
+                    <h4>
+                        Phone Number:&nbsp;{{num}}<br><br>
+                        Alert Category&nbsp;:&nbsp;{{cat}}<br><br>
+                        Country&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{cn}}<br><br>
+                        Tagging&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                        <input type="radio" name="tag" value="BL">&nbsp;BL</input>&nbsp;&nbsp;
+                        <input type="radio" name="tag" value="WL">&nbsp;WL</input>&nbsp;&nbsp;
+                        <input type="radio" name="tag" value="ML">&nbsp;ML</input><br><br>
+						I am coming to tset.....
+                    </h4>
+                </ul>
+            </div>
+            <div class="aside-footer">
+                <button type="button" class="btn btn-primary" ng-click="$hide()">Tag</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

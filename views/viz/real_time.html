@@ -1,0 +1,433 @@
+<section id="widget-grid" class="">
+<div class = "row">
+	<article class="col-sm-12 col-md-12 col-lg-10">
+
+			<!-- new widget -->
+			<div class="jarviswidget" id="wid-id-100">
+
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-100" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+
+				<header>
+					<span class="widget-icon"> <i class="fa fa-cube"></i> </span>
+					<h2>Alerts by Level</h2>
+					<div class="widget-toolbar hidden-mobile">
+						<span><i class="fa fa-location-arrow"></i> Reset</span>
+					</div>
+				</header>
+				
+				<div class="jarviswidget-editbox">
+					<div>
+						<label>Title:</label>
+							<input type="text" />
+					</div>
+				</div>
+				<div class="widget-body">
+					<div id="Level-bubble-Chart" class="dc-chart">
+					</div>
+				</div>
+
+
+			</div>
+	</article>
+	<article class="col-sm-12 col-md-12 col-lg-10">
+
+			<!-- new widget -->
+			<div class="jarviswidget" id="wid-id-101">
+
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+
+				<header>
+					<span class="widget-icon"> <i class="fa fa-cube"></i> </span>
+					<h2>Alerts by Category</h2>
+					<div class="widget-toolbar hidden-mobile">
+						<span class="onoffswitch-title"><a href="javascript:categoryBubbleChart.filterAll();dc.redrawAll();"><i class="fa fa-location-arrow"></i> Reset</a></span>
+					</div>
+				</header>
+				
+				<div class="jarviswidget-editbox">
+					<div>
+						<label>Title:</label>
+							<input type="text" />
+					</div>
+				</div>
+				<div class="widget-body">
+					<div id="Category-bubble-Chart" class="dc-chart">
+					</div>
+				</div>
+
+
+			</div>
+	</article>
+</div>
+
+<script type="text/javascript" src="js/libs/pageSetup.js"></script>
+<div class = "row">
+<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="jarviswidget jarviswidget-color-darken" id="wid-id-102" data-widget-editbutton="false">
+					<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Real Time Triggers </h2>
+
+				</header>
+
+				<!-- widget div-->
+				<div class="no-padding">
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+
+					</div>
+					<!-- end widget edit box -->
+
+					<div class="widget-body">
+						<!-- content -->
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
+								<div class="row no-space">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="widget-body no-padding">
+
+											<table id="datatable_fixed_columns" class="table table-striped table-bordered table-hover dc-data-table" width="100%" data-ng-controller="triggerDataCtrl">
+												<thead>
+													<tr class="header">
+														<th>Alert Time</th>
+														<th>Number</th>
+														<th>Country Name</th>
+														<th>Level</th>
+														<th>Category</th>
+														<th>Total Calls</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+		</div>
+	</article>
+
+</div>
+</section>
+
+<script type="text/javascript">
+
+//loadScript("js/libs/pageSetup.js");
+
+d3.json("../services/getCallTriggers.xsjs", function(data){
+	function print_filter(filter){
+		var f=eval(filter);
+		if (typeof(f.length) != "undefined") {}else{}
+		if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+		if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+		console.log(filter+"("+f.lngth+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+	}
+	
+	var levelBubbleChart = dc.bubbleChart("#Level-bubble-Chart");
+	var categoryBubbleChart = dc.bubbleChart("#Category-bubble-Chart");
+	/*var data = 	[{"cd":"2014-09-04T01:00:00.000Z","ph":123,"level":"L1","type":"INT-IN",cnt:1,"ccname":"Saint Helena","ccshname":"SHN ","totcalls":10,"totdur":308},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":456,"level":"L1","type":"INT-OUT",cnt:2,"ccname":"Faroe Islands","ccshname":"FRO ","totcalls":24,"totdur":241},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":789,"level":"L2","type":"DOMESTIC",cnt:3,"ccname":"Monaco","ccshname":"MCO ","totcalls":35,"totdur":701},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":246,"level":"L2","type":"INT-IN",cnt:4,"ccname":"Latvia","ccshname":"LVA ","totcalls":38,"totdur":832},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":123,"level":"L2","type":"INT-OUT",cnt:5,"ccname":"Gibraltar","ccshname":"GIB ","totcalls":33,"totdur":343},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":804,"level":"L3","type":"DOMESTIC",cnt:6,"ccname":"Iceland","ccshname":"IS ","totcalls":45,"totdur":993},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":764,"level":"L3","type":"INT-IN",cnt:7,"ccname":"Tanzania","ccshname":"TZA ","totcalls":75,"totdur":885},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":164,"level":"L2","type":"INT-IN",cnt:8,"ccname":"Macedonia","ccshname":"MKD ","totcalls":35,"totdur":154},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":746,"level":"L3","type":"INT-IN",cnt:9,"ccname":"Madagascar","ccshname":"MDG ","totcalls":54,"totdur":534},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":743,"level":"L2","type":"INT-OUT",cnt:10,"ccname":"British Indian Ocean Territory","ccshname":"IOT ","totcalls":29,"totdur":144},
+				{"cd":"2014-09-04T02:00:00.000Z","ph":122,"level":"L2","type":"DOMESTIC",cnt:11,"ccname":"Finland","ccshname":"FIN ","totcalls":31,"totdur":943},
+				{"cd":"2014-09-04T03:00:00.000Z","ph":948,"level":"L2","type":"INT-OUT",cnt:12,"ccname":"Finland","ccshname":"FIN ","totcalls":32,"totdur":944},
+				{"cd":"2014-09-04T03:00:00.000Z","ph":246,"level":"L1","type":"DOMESTIC",cnt:1,"ccname":"Malta","ccshname":"MLT ","totcalls":15,"totdur":935},
+				{"cd":"2014-09-04T04:00:00.000Z","ph":458,"level":"L1","type":"DOMESTIC",cnt:2,"ccname":"Cyprus","ccshname":"CYP ","totcalls":19,"totdur":134},
+				{"cd":"2014-09-04T04:00:00.000Z","ph":459,"level":"L1","type":"DOMESTIC",cnt:3,"ccname":"Liechtenstein","ccshname":"LIE ","totcalls":21,"totdur":925},
+				{"cd":"2014-09-04T04:00:00.000Z","ph":474,"level":"L2","type":"INT-IN",cnt:4,"ccname":"Kenya","ccshname":"KEN ","totcalls":31,"totdur":433},
+				{"cd":"2014-09-04T04:00:00.000Z","ph":844,"level":"L2","type":"INT-OUT",cnt:5,"ccname":"Eritrea","ccshname":"ERI ","totcalls":32,"totdur":924},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":234,"level":"L1","type":"INT-OUT",cnt:6,"ccname":"Montenegro","ccshname":"MNE ","totcalls":21,"totdur":224},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":345,"level":"L2","type":"DOMESTIC",cnt:7,"ccname":"Rwanda","ccshname":"RWA ","totcalls":34,"totdur":262},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":525,"level":"L3","type":"INT-IN",cnt:8,"ccname":"Bulgaria","ccshname":"BGR ","totcalls":63,"totdur":279},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":534,"level":"L1","type":"INT-IN",cnt:9,"ccname":"Seychelles","ccshname":"SYC ","totcalls":23,"totdur":181},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":324,"level":"L2","type":"DOMESTIC",cnt:10,"ccname":"Malawi","ccshname":"MWI ","totcalls":12,"totdur":553},
+				{"cd":"2014-09-04T05:00:00.000Z","ph":564,"level":"L3","type":"INT-IN",cnt:11,"ccname":"Zimbabwe","ccshname":"ZWE ","totcalls":43,"totdur":100},
+				{"cd":"2014-09-04T06:00:00.000Z","ph":454,"level":"L1","type":"DOMESTIC",cnt:12,"ccname":"Mozambique","ccshname":"MOZ ","totcalls":22,"totdur":172},
+				{"cd":"2014-09-04T06:00:00.000Z","ph":453,"level":"L2","type":"INT-OUT",cnt:1,"ccname":"Luxembourg","ccshname":"LUX ","totcalls":33,"totdur":205},
+				{"cd":"2014-09-04T07:00:00.000Z","ph":845,"level":"L3","type":"INT-IN",cnt:2,"ccname":"Botswana","ccshname":"BWA ","totcalls":63,"totdur":189},
+				{"cd":"2014-09-04T07:00:00.000Z","ph":245,"level":"L2","type":"DOMESTIC",cnt:3,"ccname":"Zambia","ccshname":"ZMB ","totcalls":31,"totdur":112},
+				{"cd":"2014-09-04T07:00:00.000Z","ph":435,"level":"L3","type":"INT-IN",cnt:4,"ccname":"Comoros","ccshname":"COM ","totcalls":51,"totdur":283},
+				{"cd":"2014-09-04T07:00:00.000Z","ph":453,"level":"L3","type":"INT-OUT",cnt:5,"ccname":"Somalia","ccshname":"SOM ","totcalls":64,"totdur":204},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":589,"level":"L1","type":"INT-IN",cnt:6,"ccname":"Moldova","ccshname":"MDA ","totcalls":11,"totdur":443},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":254,"level":"L2","type":"DOMESTIC",cnt:7,"ccname":"Djibouti","ccshname":"DJI ","totcalls":31,"totdur":505},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":564,"level":"L3","type":"INT-OUT",cnt:8,"ccname":"Portugal","ccshname":"PRT ","totcalls":51,"totdur":101},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":245,"level":"L1","type":"DOMESTIC",cnt:9,"ccname":"Czech Republic","ccshname":"CZE ","totcalls":21,"totdur":443},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":456,"level":"L2","type":"INT-IN",cnt:10,"ccname":"Croatia","ccshname":"HRV ","totcalls":33,"totdur":596},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":245,"level":"L3","type":"INT-IN",cnt:11,"ccname":"United Arab Emirates","ccshname":"ARE ","totcalls":68,"totdur":345},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":676,"level":"L2","type":"INT-OUT",cnt:12,"ccname":"Andorra","ccshname":"AND ","totcalls":31,"totdur":214},
+				{"cd":"2014-09-04T08:00:00.000Z","ph":356,"level":"L2","type":"DOMESTIC",cnt:1,"ccname":"Uganda","ccshname":"UGA ","totcalls":31,"totdur":225},
+				{"cd":"2014-09-04T10:00:00.000Z","ph":756,"level":"L1","type":"INT-OUT",cnt:2,"ccname":"Ukraine","ccshname":"UKR ","totcalls":21,"totdur":922},
+				{"cd":"2014-09-04T10:00:00.000Z","ph":356,"level":"L2","type":"DOMESTIC",cnt:3,"ccname":"Ireland","ccshname":"IRL ","totcalls":32,"totdur":515},
+				{"cd":"2014-09-04T10:00:00.000Z","ph":356,"level":"L3","type":"INT-IN",cnt:4,"ccname":"Mayotte","ccshname":"MYT ","totcalls":46,"totdur":255},
+				{"cd":"2014-09-04T10:00:00.000Z","ph":546,"level":"L1","type":"DOMESTIC",cnt:5,"ccname":"Aruba","ccshname":"ABW ","totcalls":11,"totdur":183},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":905,"level":"L2","type":"INT-OUT",cnt:6,"ccname":"Ethiopia","ccshname":"ETH ","totcalls":30,"totdur":345},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":908,"level":"L3","type":"INT-IN",cnt:7,"ccname":"Lesotho","ccshname":"LSO ","totcalls":50,"totdur":345},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":609,"level":"L1","type":"INT-OUT",cnt:8,"ccname":"Swaziland","ccshname":"SWZ ","totcalls":20,"totdur":435},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":560,"level":"L2","type":"INT-OUT",cnt:9,"ccname":"Lithuania","ccshname":"LTU ","totcalls":30,"totdur":344},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":456,"level":"L3","type":"INT-IN",cnt:10,"ccname":"Estonia","ccshname":"EST ","totcalls":50,"totdur":345},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":879,"level":"L1","type":"INT-OUT",cnt:11,"ccname":"Belarus","ccshname":"BLR ","totcalls":20,"totdur":34},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":345,"level":"L2","type":"DOMESTIC",cnt:12,"ccname":"San Marino","ccshname":"SMR ","totcalls":30,"totdur":345},
+				{"cd":"2014-09-04T11:00:00.000Z","ph":985,"level":"L3","type":"INT-IN",cnt:1,"ccname":"Serbia  and Kosovo","ccshname":"SRB ","totcalls":21,"totdur":123},
+				{"cd":"2014-09-04T12:00:00.000Z","ph":498,"level":"L1","type":"INT-IN",cnt:2,"ccname":"Slovenia","ccshname":"SVN ","totcalls":21,"totdur":234},
+				{"cd":"2014-09-04T12:00:00.000Z","ph":458,"level":"L1","type":"DOMESTIC",cnt:3,"ccname":"Slovakia","ccshname":"SVK ","totcalls":20,"totdur":345},
+				{"cd":"2014-09-04T12:00:00.000Z","ph":985,"level":"L2","type":"INT-OUT",cnt:4,"ccname":"Sudan","ccshname":"SDN ","totcalls":33,"totdur":123}
+				];*/
+	
+	var dateArray = [];
+	data.forEach(function(a){
+		a.dd = new Date(a.tt);
+		a.hour = d3.time.minute(a.dd);
+		a.ctanaom = a.ctanaom == 1 ? "L1" : a.ctanaom;
+		a.ctanaom = a.ctanaom == 2 ? "L2" : a.ctanaom;
+		a.ctanaom = a.ctanaom == 3 ? "L3" : a.ctanaom;
+		a.ct = a.ct == "INTERNATIONAL_OUTGOING" ? "INT-OUT" : a.ct;
+		a.ct = a.ct == "INTERNATIONAL_INCOMING" ? "INT-IN" : a.ct;
+		a.timeDate = moment(a.hour).format('MMM DD, HH:MM');
+		console.log("call type", a.ct);
+		dateArray.push(a.hour)
+	});
+	
+	var minDate = d3.min(dateArray);
+	var maxDate = d3.max(dateArray);
+	console.log("min date", minDate);
+	console.log("Max Date", maxDate);
+
+	console.log("Going into cross filter");
+	var alt = crossfilter(data);
+	var dateDim = alt.dimension(function(a){
+		return a.hour;
+	});
+	var levDim = alt.dimension(function(a){
+		return [a.hour, a.ctanaom];
+	});
+	//print_filter("dateDim");
+	
+
+	var levGroup = levDim.group().reduce(
+		function(a,d){
+			++a.count;
+			a.calls += d.tc;
+			//a.duration += d.totdur;
+			return a;
+		},
+		function(a,d){
+			--a.count;
+			a.calls -= d.tc;
+			//a.duration -= d.totdur;
+			return a;
+		},
+		function(){
+			return {count: 0, calls: 0};
+		}
+	);
+	
+	print_filter("levGroup");
+	
+	var catDim = alt.dimension(function(a){
+		return [a.hour, a.ct];
+	});
+	
+	var catGroup = catDim.group().reduce(
+		function(a,d){
+			++a.count;
+			a.catCalls += d.tc;
+			//a.catDuration += d.totdur;
+			return a;
+		},
+		function(a,d){
+			--a.count;
+			a.catCalls -= d.tc;
+			//a.catDuration -= d.totdur;
+			return a;
+		},
+		function(){
+			return {count: 0, catCalls: 0};
+		}
+	);
+	
+	print_filter("catGroup");
+	
+	
+	
+	console.log("out of crossfilter");
+	console.log("Going for the graph");
+	
+	
+	levelBubbleChart
+		.width(900)
+		.height(300)
+		.transitionDuration(1500)
+		.margins({top: 10, right: 50, bottom: 30, left: 40})
+		//.mouseZoomable(true)
+		.dimension(levDim)
+		.group(levGroup)
+		.colors(colorbrewer.YlOrRd[9])
+		.colorDomain([-1000, 1000])
+		//.colors('red', 'blue', 'green')
+		.colorAccessor(function (d) {
+            return d.value.count*100;
+        })
+        .keyAccessor(function (p) {
+            return p.key[0];
+        })
+        .valueAccessor(function (p) {
+            return p.value.calls;
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value.calls*3;
+        })
+		.maxBubbleRelativeSize(0.3)
+		.x(d3.time.scale().domain([minDate, maxDate]))
+		.round(d3.time.minute.round)
+		.xUnits(d3.time.minutes)
+		.y(d3.scale.linear().domain([0, 500]))
+        .r(d3.scale.linear().domain([0, 4000]))
+		.elasticY(true)
+        //.elasticX(true)
+        .yAxisPadding(100)
+        .xAxisPadding(500)
+        .xAxisLabel('Time')
+        .yAxisLabel('Sum of Alert Call Counts by Level')
+		.renderHorizontalGridLines(true)
+		.renderVerticalGridLines(true)
+		.renderLabel(true) // (optional) whether chart should render labels, :default = true
+        .label(function (p) {
+            return p.key[1];
+        })
+		.renderTitle(true) // (optional) whether chart should render titles, :default = false
+        .title(function (p) {
+            return [p.key[1],
+                   "Alert Count: " + p.value.count,
+                   "Total Calls: " + p.value.calls]
+                   .join("\n");
+        })
+		.yAxis().tickFormat(function (v) {
+            return v;
+        });
+		
+		
+	categoryBubbleChart
+		.width(900)
+		.height(300)
+		.transitionDuration(1500)
+		.margins({top: 10, right: 50, bottom: 30, left: 40})
+		//.mouseZoomable(true)
+		.dimension(catDim)
+		.group(catGroup)
+		.colors(colorbrewer.YlOrRd[9])
+		.colorDomain([-1000, 1000])
+		//.colors('red', 'blue', 'green')
+		.colorAccessor(function (d) {
+            return d.value.count*100;
+        })
+        .keyAccessor(function (p) {
+            return p.key[0];
+        })
+        .valueAccessor(function (p) {
+            return p.value.catCalls;
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value.catCalls*0.5;
+        })
+		.maxBubbleRelativeSize(0.3)
+		.x(d3.time.scale().domain([minDate, maxDate]))
+		.round(d3.time.minute.round)
+		.xUnits(d3.time.minutes)
+		.y(d3.scale.linear().domain([0, 500]))
+        .r(d3.scale.linear().domain([0, 4000]))
+		.elasticY(true)
+        //.elasticX(true)
+        .yAxisPadding(100)
+        .xAxisPadding(500)
+        .xAxisLabel('Time')
+        .yAxisLabel('Sum of Alert Call Counts by category')
+		.renderHorizontalGridLines(true)
+		.renderVerticalGridLines(true)
+		.renderLabel(true) // (optional) whether chart should render labels, :default = true
+        .label(function (p) {
+            return p.key[1];
+        })
+		.renderTitle(true) // (optional) whether chart should render titles, :default = false
+        .title(function (p) {
+            return [p.key[1],
+                   "Alert Count: " + p.value.count,
+                   "Total Calls: " + p.value.catCalls]
+                   .join("\n");
+        })
+		.yAxis().tickFormat(function (v) {
+            return v;
+        });
+	
+	dc.dataTable(".dc-data-table")
+				.dimension(dateDim)
+                .group(function (d) {
+                    return d.ct;
+                })
+				.size(600)
+				.columns([
+					function (d) {
+						return d.timeDate;
+					},
+					function (d) {
+						return d.pn;
+					},
+					function (d){
+						return d.cn;
+					},
+					function (d) {
+						return d.ctanaom;
+					},
+					function (d) {
+						return d.ct;
+					},
+					function (d) {
+						return d.tc;
+					}
+				])
+				.sortBy(function (d) {
+					return d.level;
+				})
+				.order(d3.ascending)
+				.renderlet(function (table) {
+					table.selectAll(".dc-table-group").classed("info", true);
+				});
+	
+
+			
+	dc.renderAll();
+	console.log("Plotting Done");
+	})
+	
+</script>
